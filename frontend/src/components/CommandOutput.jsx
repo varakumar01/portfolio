@@ -214,6 +214,7 @@ const CommandOutput = ({ type, data }) => {
               <div><span className="text-cyan-400">OS:</span> Kali Linux</div>
               <div><span className="text-cyan-400">Shell:</span> bash</div>
               <div><span className="text-cyan-400">Projects:</span> {data.projects.length}</div>
+              <div><span className="text-cyan-400">Experience:</span> {data.experience.length} company</div>
               <div><span className="text-cyan-400">Skills:</span> {Object.keys(data.skills).length} categories</div>
               <div><span className="text-cyan-400">Certifications:</span> {data.certifications.length}</div>
             </div>
