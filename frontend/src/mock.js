@@ -148,8 +148,7 @@ export const portfolioData = {
     github: "https://github.com/varakumar",
     gitlab: "https://gitlab.com/Tony_01",
     linkedin: "https://linkedin.com/in/varakumar",
-    email: "varakumar7000@gmail.com",
-    phone: "+91 6309856263"
+    email: "varakumar7000@gmail.com"
   },
   
   github: {
