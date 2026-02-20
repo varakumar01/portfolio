@@ -58,6 +58,23 @@ export const portfolioData = {
     ]
   },
   
+  experience: [
+    {
+      company: "Holmsecurity",
+      role: "Security Developer",
+      location: "Sweden (Remote/WFH)",
+      duration: "2 years",
+      period: "2023 - Present",
+      description: "Working remotely on security solutions and development projects",
+      responsibilities: [
+        "Security development and implementation",
+        "Vulnerability assessment and penetration testing",
+        "Security tool development",
+        "Remote collaboration with international team"
+      ]
+    }
+  ],
+  
   certifications: [
     {
       name: "TCM Security Certifications",
