@@ -167,7 +167,7 @@ const Terminal = () => {
             {item.type === 'command' && (
               <div className="terminal-line">
                 <span className="terminal-prompt">
-                  <span className="terminal-user">varakumar@kali</span>
+                  <span className="terminal-user">varakumar@{portfolioData.user.ip}</span>
                   <span className="terminal-separator">:</span>
                   <span className="terminal-path">~</span>
                   <span className="terminal-dollar">$</span>
