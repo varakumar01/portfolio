@@ -1,12 +1,12 @@
 import React from 'react';
 
-const CommandOutput = ({ type, data }) => {
+const CommandOutput = ({ type, data, showAll, showLong }) => {
   switch (type) {
     case 'help':
       return (
         <div className="terminal-output">
           <div>Available commands:</div>
-          <div className="mt-2">
+          <div className="mt-1">
             <div>  <span className="text-green-400">ls</span>         - List available portfolio sections</div>
             <div>  <span className="text-green-400">cat</span>        - Display detailed information about a section</div>
             <div className="ml-8 text-gray-400">Examples:</div>
@@ -20,30 +20,52 @@ const CommandOutput = ({ type, data }) => {
             <div>  <span className="text-green-400">clear</span>      - Clear terminal screen</div>
             <div>  <span className="text-green-400">help</span>       - Show this help message</div>
           </div>
-          <div className="mt-2 text-gray-400">Tip: You can type section names directly without 'cat' (e.g., 'projects')</div>
+          <div className="mt-1 text-gray-400">Tip: You can type section names directly without 'cat' (e.g., 'projects')</div>
+          <div className="mt-1 text-gray-400">ls supports flags: -a (show hidden), -l (long format), -al (both)</div>
         </div>
       );
 
     case 'ls':
-      return (
-        <div className="terminal-output">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="text-blue-400">Projects</div>
-            <div className="text-blue-400">Github</div>
-            <div className="text-blue-400">Skills</div>
-            <div className="text-blue-400">Experience</div>
-            <div className="text-blue-400">Certifications</div>
-            <div className="text-blue-400">Social</div>
+      const sections = ['Experience', 'Projects', 'Skills', 'Certifications', 'Github', 'Social'];
+      const hiddenSections = ['.bash_history', '.vimrc', '.bashrc'];
+      
+      if (showLong) {
+        return (
+          <div className="terminal-output">
+            <div className="text-sm">total {showAll ? sections.length + hiddenSections.length : sections.length}</div>
+            {showAll && hiddenSections.map((section, idx) => (
+              <div key={idx} className="text-gray-500 text-sm">
+                drwxr-xr-x 1 varakumar varakumar  512 Jan 15 10:30 {section}
+              </div>
+            ))}
+            {sections.map((section, idx) => (
+              <div key={idx} className="text-sm">
+                drwxr-xr-x 1 varakumar varakumar  512 Jan 15 10:30 <span className="text-blue-400">{section}</span>
+              </div>
+            ))}
           </div>
-        </div>
-      );
+        );
+      } else {
+        return (
+          <div className="terminal-output">
+            <div className="grid grid-cols-3 gap-4">
+              {showAll && hiddenSections.map((section, idx) => (
+                <div key={idx} className="text-gray-500">{section}</div>
+              ))}
+              {sections.map((section, idx) => (
+                <div key={idx} className="text-blue-400">{section}</div>
+              ))}
+            </div>
+          </div>
+        );
+      }
 
     case 'whoami':
       return (
         <div className="terminal-output">
           <div className="text-green-400 font-bold">{data.user.name}</div>
           <div className="text-yellow-400">{data.user.role}</div>
-          <div className="mt-2">{data.user.bio}</div>
+          <div className="mt-1">{data.user.bio}</div>
         </div>
       );
 
