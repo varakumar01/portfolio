@@ -72,18 +72,18 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
     case 'projects':
       return (
         <div className="terminal-output">
-          <div className="text-green-400 font-bold mb-3">Projects:</div>
+          <div className="text-green-400 font-bold mb-2">Projects:</div>
           {data.projects.map((project, index) => (
-            <div key={index} className="mb-4 border-l-2 border-green-600 pl-3">
+            <div key={index} className="mb-3 border-l-2 border-green-600 pl-3">
               <div className="text-yellow-400 font-bold">{project.name}</div>
-              <div className="text-gray-400 text-sm mt-1">Type: {project.type}</div>
+              <div className="text-gray-400 text-sm">Type: {project.type}</div>
               <div className="mt-1">{project.description}</div>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-1 flex flex-wrap gap-2">
                 {project.technologies.map((tech, idx) => (
                   <span key={idx} className="text-cyan-400 text-sm">[{tech}]</span>
                 ))}
               </div>
-              <div className="mt-1 text-green-500 text-sm">Status: {project.status}</div>
+              <div className="text-green-500 text-sm">Status: {project.status}</div>
             </div>
           ))}
         </div>
