@@ -120,11 +120,11 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
     case 'skills':
       return (
         <div className="terminal-output">
-          <div className="text-green-400 font-bold mb-3">Skills & Expertise:</div>
+          <div className="text-green-400 font-bold mb-2">Skills & Expertise:</div>
           {Object.entries(data.skills).map(([category, skillList], index) => (
-            <div key={index} className="mb-3">
+            <div key={index} className="mb-2">
               <div className="text-yellow-400 font-bold">{category}:</div>
-              <div className="ml-3 mt-1 grid grid-cols-2 gap-2">
+              <div className="ml-3 grid grid-cols-2 gap-2">
                 {skillList.map((skill, idx) => (
                   <div key={idx} className="text-cyan-400">• {skill}</div>
                 ))}
@@ -137,9 +137,9 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
     case 'certifications':
       return (
         <div className="terminal-output">
-          <div className="text-green-400 font-bold mb-3">Certifications:</div>
+          <div className="text-green-400 font-bold mb-2">Certifications:</div>
           {data.certifications.map((cert, index) => (
-            <div key={index} className="mb-3 border-l-2 border-yellow-600 pl-3">
+            <div key={index} className="mb-2 border-l-2 border-yellow-600 pl-3">
               <div className="text-yellow-400 font-bold">{cert.name}</div>
               <div className="text-gray-400">Issuer: {cert.issuer}</div>
               <div className={`text-sm ${cert.status === 'Certified' ? 'text-green-500' : 'text-orange-500'}`}>
