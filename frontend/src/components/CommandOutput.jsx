@@ -7,19 +7,20 @@ const CommandOutput = ({ type, data }) => {
         <div className="terminal-output">
           <div>Available commands:</div>
           <div className="mt-2">
-            <div>  <span className="text-green-400">ls</span>                  - List available portfolio sections</div>
-            <div>  <span className="text-green-400">cat projects</span>       - View projects</div>
-            <div>  <span className="text-green-400">cat github</span>         - View GitHub profile</div>
-            <div>  <span className="text-green-400">cat skills</span>         - View skills</div>
-            <div>  <span className="text-green-400">cat experience</span>     - View work experience</div>
-            <div>  <span className="text-green-400">cat certifications</span> - View certifications</div>
-            <div>  <span className="text-green-400">cat social</span>         - View social media links</div>
-            <div>  <span className="text-green-400">whoami</span>             - Display user information</div>
-            <div>  <span className="text-green-400">neofetch</span>           - Display system information</div>
-            <div>  <span className="text-green-400">clear</span>              - Clear terminal screen</div>
-            <div>  <span className="text-green-400">help</span>               - Show this help message</div>
+            <div>  <span className="text-green-400">ls</span>         - List available portfolio sections</div>
+            <div>  <span className="text-green-400">cat</span>        - Display detailed information about a section</div>
+            <div className="ml-8 text-gray-400">Examples:</div>
+            <div className="ml-8 text-gray-400">  cat projects</div>
+            <div className="ml-8 text-gray-400">  cat experience</div>
+            <div className="ml-8 text-gray-400">  cat skills</div>
+            <div className="ml-8 text-gray-400">  cat certifications</div>
+            <div className="ml-8 text-gray-400">  cat social</div>
+            <div>  <span className="text-green-400">whoami</span>     - Display user information</div>
+            <div>  <span className="text-green-400">neofetch</span>   - Display system information</div>
+            <div>  <span className="text-green-400">clear</span>      - Clear terminal screen</div>
+            <div>  <span className="text-green-400">help</span>       - Show this help message</div>
           </div>
-          <div className="mt-2">Tip: You can also type command names directly (e.g., 'projects' instead of 'cat projects')</div>
+          <div className="mt-2 text-gray-400">Tip: You can type section names directly without 'cat' (e.g., 'projects')</div>
         </div>
       );
 
