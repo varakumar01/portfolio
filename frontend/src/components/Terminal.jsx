@@ -11,9 +11,8 @@ const Terminal = () => {
   const terminalRef = useRef(null);
 
   useEffect(() => {
-    // Welcome message
+    // Initial prompt without welcome message
     setHistory([
-      { type: 'system', content: 'Welcome to Kali Linux' },
       { type: 'system', content: `${portfolioData.user.name} - ${portfolioData.user.role}` },
       { type: 'system', content: '' },
       { type: 'system', content: "Type 'help' for available commands or 'ls' to see portfolio sections." },
