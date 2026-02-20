@@ -30,6 +30,7 @@ const CommandOutput = ({ type, data }) => {
             <div className="text-blue-400">Projects</div>
             <div className="text-blue-400">Github</div>
             <div className="text-blue-400">Skills</div>
+            <div className="text-blue-400">Experience</div>
             <div className="text-blue-400">Certifications</div>
             <div className="text-blue-400">Social</div>
           </div>
