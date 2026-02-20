@@ -178,17 +178,13 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
     case 'social':
       return (
         <div className="terminal-output">
-          <div className="text-green-400 font-bold mb-3">Social Media & Contact:</div>
-          <div className="space-y-2">
+          <div className="text-green-400 font-bold mb-2">Social Media & Contact:</div>
+          <div className="space-y-1">
             <div>
               <span className="text-gray-400">Email:</span>{' '}
               <a href={`mailto:${data.social.email}`} className="text-blue-400 underline">
                 {data.social.email}
               </a>
-            </div>
-            <div>
-              <span className="text-gray-400">Phone:</span>{' '}
-              <span className="text-white">{data.social.phone}</span>
             </div>
             <div>
               <span className="text-gray-400">GitHub:</span>{' '}
