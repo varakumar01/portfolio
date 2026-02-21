@@ -169,6 +169,32 @@ const Terminal = () => {
       e.preventDefault();
       handleCommand(currentCommand);
       setCurrentCommand('');
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      
+      if (!currentCommand.trim()) {
+        return; // Ignore tab if no input
+      }
+      
+      // List of available commands
+      const commands = [
+        'help', 'ls', 'clear', 'whoami', 'about', 'status', 'impact', 
+        'neofetch', 'projects', 'experience', 'skills', 'certifications', 
+        'contact', 'gitlab', 'issues', 'resume', 'cat', 'sudo'
+      ];
+      
+      const input = currentCommand.toLowerCase();
+      const matches = commands.filter(cmd => cmd.startsWith(input));
+      
+      if (matches.length === 1) {
+        setCurrentCommand(matches[0]);
+      } else if (matches.length > 1) {
+        // Show matches
+        setHistory(prev => [...prev, 
+          { type: 'command', content: currentCommand },
+          { type: 'system', content: matches.join('  ') }
+        ]);
+      }
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (commandHistory.length > 0) {
