@@ -8,6 +8,8 @@ const Terminal = () => {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [currentCommand, setCurrentCommand] = useState('');
   const [userIp, setUserIp] = useState('fetching...');
+  const [tabMatches, setTabMatches] = useState([]);
+  const [tabIndex, setTabIndex] = useState(0);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
 
