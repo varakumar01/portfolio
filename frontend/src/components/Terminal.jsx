@@ -234,7 +234,7 @@ const Terminal = () => {
           <span className="terminal-button minimize"></span>
           <span className="terminal-button maximize"></span>
         </div>
-        <div className="terminal-title">varakumar@{portfolioData.user.ip}:~</div>
+        <div className="terminal-title">varakumar@{userIp}:~</div>
       </div>
       
       <div className="terminal-body" ref={terminalRef}>
