@@ -165,17 +165,18 @@ export const portfolioData = {
   ],
   
   social: {
-    github: "https://github.com/varakumar",
     gitlab: "https://gitlab.com/Tony_01",
+    github: "https://github.com/varakumar",
     linkedin: "https://linkedin.com/in/varakumar",
     email: "varakumar7000@gmail.com"
   },
   
-  github: {
-    username: "varakumar",
-    gitlab: "Tony_01",
-    profile: "https://github.com/varakumar",
+  gitlab: {
+    username: "Tony_01",
+    gitlab_username: "Tony_01",
+    profile: "https://gitlab.com/Tony_01",
     repositories: [
+      "RationUI",
       "wireguard-vpn",
       "op9-nethunter-kernel",
       "kernelsu-lineageos",
