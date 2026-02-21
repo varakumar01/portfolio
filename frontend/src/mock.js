@@ -103,7 +103,7 @@ export const portfolioData = {
     message: "Looking for Job opportunity"
   },
   
-  resumeLink: "https://drive.google.com/file/d/17c5RtAgWn5TdRQUxnDIvLQogPoUoxgO_/view?usp=sharing",
+  resumeLink: "https://drive.google.com/file/d/1i-kNEfJLWIOSWX6ObTrUU8g4jMLOq34T/view?usp=drive_link",
   
   experience: [
     {
