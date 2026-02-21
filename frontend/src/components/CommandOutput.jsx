@@ -48,7 +48,7 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
       } else {
         return (
           <div className="terminal-output">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-x-6 gap-y-0">
               {showAll && hiddenSections.map((section, idx) => (
                 <div key={idx} className="text-gray-500">{section}</div>
               ))}
