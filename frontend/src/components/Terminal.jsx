@@ -56,27 +56,50 @@ const Terminal = () => {
     // Process command
     let output;
     
+    // Handle sudo command
+    if (command === 'sudo') {
+      const sudoCmd = args.join(' ');
+      output = { type: 'error', content: `Authorization revoked${sudoCmd ? ': ' + sudoCmd : ''}` };
+    }
     // Handle ls with flags
-    if (command === 'ls') {
+    else if (command === 'ls') {
       const hasAll = args.includes('-a') || args.includes('-al') || args.includes('-la');
       const hasLong = args.includes('-l') || args.includes('-al') || args.includes('-la');
       output = { type: 'ls', showAll: hasAll, showLong: hasLong };
+    }
+    // Handle gitlab commands
+    else if (command === 'gitlab') {
+      const flag = args[0];
+      if (flag === '--featured' || flag === '--skills' || flag === '--recent') {
+        output = { type: 'projects' };
+      } else if (flag === '--help') {
+        output = { type: 'gitlab-help' };
+      } else {
+        output = { type: 'gitlab' };
+      }
     }
     // Handle cat command
     else if (command === 'cat') {
       const section = args.join(' ').toLowerCase();
       if (section === 'projects' || section === '.projects') {
         output = { type: 'projects' };
-      } else if (section === 'github' || section === '.github') {
-        output = { type: 'github' };
+      } else if (section === 'gitlab' || section === '.gitlab') {
+        output = { type: 'gitlab' };
       } else if (section === 'skills' || section === '.skills') {
         output = { type: 'skills' };
       } else if (section === 'experience' || section === '.experience') {
         output = { type: 'experience' };
       } else if (section === 'certifications' || section === '.certifications') {
         output = { type: 'certifications' };
-      } else if (section === 'social' || section === '.social') {
-        output = { type: 'social' };
+      } else if (section === 'contact' || section === '.contact') {
+        output = { type: 'contact' };
+      } else if (section === 'about' || section === '.about') {
+        output = { type: 'about' };
+      } else if (section === 'issues' || section === '.issues' || section === 'known-issues') {
+        output = { type: 'issues' };
+      } else if (section === 'resume' || section === '.resume') {
+        window.open(portfolioData.resumeLink, '_blank');
+        output = { type: 'system', content: 'Opening resume in new tab...' };
       } else if (section) {
         output = { type: 'error', content: `cat: ${section}: No such file or directory` };
       } else {
@@ -95,11 +118,11 @@ const Terminal = () => {
         case 'whoami':
           output = { type: 'whoami' };
           break;
+        case 'about':
+          output = { type: 'about' };
+          break;
         case 'projects':
           output = { type: 'projects' };
-          break;
-        case 'github':
-          output = { type: 'github' };
           break;
         case 'skills':
           output = { type: 'skills' };
@@ -107,11 +130,25 @@ const Terminal = () => {
         case 'certifications':
           output = { type: 'certifications' };
           break;
-        case 'social':
-          output = { type: 'social' };
+        case 'contact':
+          output = { type: 'contact' };
           break;
         case 'experience':
           output = { type: 'experience' };
+          break;
+        case 'issues':
+        case 'known-issues':
+          output = { type: 'issues' };
+          break;
+        case 'status':
+          output = { type: 'status' };
+          break;
+        case 'impact':
+          output = { type: 'impact' };
+          break;
+        case 'resume':
+          window.open(portfolioData.resumeLink, '_blank');
+          output = { type: 'system', content: 'Opening resume in new tab...' };
           break;
         case 'neofetch':
           output = { type: 'neofetch' };
