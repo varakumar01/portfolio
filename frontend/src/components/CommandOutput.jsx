@@ -10,23 +10,23 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
             <div>  <span className="text-green-400">ls</span>         - List available portfolio sections</div>
             <div>  <span className="text-green-400">cat</span>        - Display detailed information about a section</div>
             <div className="ml-8 text-gray-400">Examples:</div>
-            <div className="ml-8 text-gray-400">  cat projects</div>
+            <div className="ml-8 text-gray-400">  cat about</div>
             <div className="ml-8 text-gray-400">  cat experience</div>
+            <div className="ml-8 text-gray-400">  cat projects</div>
             <div className="ml-8 text-gray-400">  cat skills</div>
-            <div className="ml-8 text-gray-400">  cat certifications</div>
-            <div className="ml-8 text-gray-400">  cat social</div>
-            <div>  <span className="text-green-400">whoami</span>     - Display user information</div>
+            <div>  <span className="text-green-400">whoami</span>     - Display username</div>
+            <div>  <span className="text-green-400">status</span>     - Display current status</div>
+            <div>  <span className="text-green-400">impact</span>     - Show career impact metrics</div>
             <div>  <span className="text-green-400">neofetch</span>   - Display system information</div>
             <div>  <span className="text-green-400">clear</span>      - Clear terminal screen</div>
             <div>  <span className="text-green-400">help</span>       - Show this help message</div>
           </div>
-          <div className="mt-1 text-gray-400">Tip: You can type section names directly without 'cat' (e.g., 'projects')</div>
-          <div className="mt-1 text-gray-400">ls supports flags: -a (show hidden), -l (long format), -al (both)</div>
+          <div className="mt-1 text-gray-400">Tip: You can type section names directly without 'cat'</div>
         </div>
       );
 
     case 'ls':
-      const sections = ['Experience', 'Projects', 'Skills', 'Certifications', 'Github', 'Social'];
+      const sections = ['About', 'Experience', 'Projects', 'Skills', 'Certifications', 'Gitlab', 'Known-Issues', 'Resume', 'Contact'];
       const hiddenSections = ['.bash_history', '.vimrc', '.bashrc'];
       
       if (showLong) {
@@ -61,6 +61,13 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
       }
 
     case 'whoami':
+      return (
+        <div className="terminal-output">
+          <div>{data.user.username}</div>
+        </div>
+      );
+    
+    case 'about':
       return (
         <div className="terminal-output">
           <div className="text-green-400 font-bold">{data.user.name}</div>
