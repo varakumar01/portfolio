@@ -171,6 +171,8 @@ const Terminal = () => {
       e.preventDefault();
       handleCommand(currentCommand);
       setCurrentCommand('');
+      setTabMatches([]);
+      setTabIndex(0);
     } else if (e.key === 'Tab') {
       e.preventDefault();
       
@@ -178,24 +180,64 @@ const Terminal = () => {
         return; // Ignore tab if no input
       }
       
-      // List of available commands
+      const input = currentCommand.trim();
+      const inputLower = input.toLowerCase();
+      const parts = input.split(' ');
+      
+      // List of available commands and sections
       const commands = [
         'help', 'ls', 'clear', 'whoami', 'about', 'status', 'impact', 
         'neofetch', 'projects', 'experience', 'skills', 'certifications', 
         'contact', 'gitlab', 'issues', 'resume', 'cat', 'sudo'
       ];
       
-      const input = currentCommand.toLowerCase();
-      const matches = commands.filter(cmd => cmd.startsWith(input));
+      const sections = [
+        'about', 'experience', 'projects', 'skills', 'certifications', 
+        'gitlab', 'known-issues', 'issues', 'resume', 'contact'
+      ];
       
-      if (matches.length === 1) {
+      let matches = [];
+      
+      // Handle "cat <section>" completion
+      if (parts[0].toLowerCase() === 'cat' && parts.length > 1) {
+        const sectionInput = parts.slice(1).join(' ').toLowerCase();
+        matches = sections.filter(s => s.startsWith(sectionInput)).map(s => `cat ${s}`);
+      }
+      // Handle regular command completion
+      else {
+        // Try to match commands first
+        const cmdMatches = commands.filter(cmd => cmd.startsWith(inputLower));
+        // Also try to match section names directly
+        const sectionMatches = sections.filter(s => s.startsWith(inputLower));
+        matches = [...new Set([...cmdMatches, ...sectionMatches])];
+      }
+      
+      if (matches.length === 0) {
+        // No matches, clear tab state
+        setTabMatches([]);
+        setTabIndex(0);
+      } else if (matches.length === 1) {
+        // Single match, autocomplete
         setCurrentCommand(matches[0]);
-      } else if (matches.length > 1) {
-        // Show matches
-        setHistory(prev => [...prev, 
-          { type: 'command', content: currentCommand },
-          { type: 'system', content: matches.join('  ') }
-        ]);
+        setTabMatches([]);
+        setTabIndex(0);
+      } else {
+        // Multiple matches
+        if (tabMatches.length === 0 || JSON.stringify(tabMatches) !== JSON.stringify(matches)) {
+          // First tab press or different matches - show options
+          setHistory(prev => [...prev, 
+            { type: 'command', content: currentCommand },
+            { type: 'system', content: matches.join('  ') }
+          ]);
+          setTabMatches(matches);
+          setTabIndex(0);
+          setCurrentCommand(matches[0]);
+        } else {
+          // Subsequent tab presses - cycle through matches
+          const nextIndex = (tabIndex + 1) % matches.length;
+          setTabIndex(nextIndex);
+          setCurrentCommand(matches[nextIndex]);
+        }
       }
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -222,6 +264,12 @@ const Terminal = () => {
     } else if (e.key === 'c' && e.ctrlKey) {
       e.preventDefault();
       setCurrentCommand('');
+      setTabMatches([]);
+      setTabIndex(0);
+    } else {
+      // Reset tab completion on any other key
+      setTabMatches([]);
+      setTabIndex(0);
     }
   };
 
