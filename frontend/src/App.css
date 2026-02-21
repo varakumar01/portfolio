@@ -241,6 +241,14 @@
   gap: 2rem;
 }
 
+.gap-x-6 {
+  column-gap: 1.5rem;
+}
+
+.gap-y-0 {
+  row-gap: 0;
+}
+
 .flex {
   display: flex;
 }
