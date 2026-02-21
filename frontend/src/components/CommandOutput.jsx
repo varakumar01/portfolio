@@ -288,39 +288,6 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
         </div>
       );
 
-    case 'social':
-      return (
-        <div className="terminal-output">
-          <div className="text-green-400 font-bold mb-2">Social Media & Contact:</div>
-          <div className="space-y-1">
-            <div>
-              <span className="text-gray-400">Email:</span>{' '}
-              <a href={`mailto:${data.social.email}`} className="text-blue-400 underline">
-                {data.social.email}
-              </a>
-            </div>
-            <div>
-              <span className="text-gray-400">GitHub:</span>{' '}
-              <a href={data.social.github} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">
-                {data.social.github}
-              </a>
-            </div>
-            <div>
-              <span className="text-gray-400">GitLab:</span>{' '}
-              <a href={data.social.gitlab} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">
-                {data.social.gitlab}
-              </a>
-            </div>
-            <div>
-              <span className="text-gray-400">LinkedIn:</span>{' '}
-              <a href={data.social.linkedin} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">
-                {data.social.linkedin}
-              </a>
-            </div>
-          </div>
-        </div>
-      );
-
     case 'neofetch':
       return (
         <div className="terminal-output font-mono">
