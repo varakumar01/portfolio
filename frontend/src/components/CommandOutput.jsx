@@ -202,34 +202,6 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
         </div>
       );
 
-    case 'github':
-      return (
-        <div className="terminal-output">
-          <div className="text-green-400 font-bold mb-2">GitHub & GitLab Profile:</div>
-          <div className="mb-1">
-            <span className="text-gray-400">GitHub:</span> <span className="text-white">{data.github.username}</span>
-          </div>
-          <div className="mb-1">
-            <span className="text-gray-400">GitLab:</span> <span className="text-white">{data.github.gitlab}</span>
-          </div>
-          <div className="mb-1">
-            <span className="text-gray-400">Profile:</span> <a href={data.github.profile} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">{data.github.profile}</a>
-          </div>
-          <div className="mt-2 text-yellow-400 font-bold">Statistics:</div>
-          <div className="ml-3">
-            <div><span className="text-gray-400">Repositories:</span> {data.github.stats.repos}</div>
-            <div><span className="text-gray-400">Contributions:</span> {data.github.stats.contributions}</div>
-            <div><span className="text-gray-400">Focus:</span> {data.github.stats.focus}</div>
-          </div>
-          <div className="mt-2 text-yellow-400 font-bold">Notable Repositories:</div>
-          <div className="ml-3">
-            {data.github.repositories.map((repo, idx) => (
-              <div key={idx} className="text-cyan-400">• {repo}</div>
-            ))}
-          </div>
-        </div>
-      );
-
     case 'skills':
       return (
         <div className="terminal-output">
