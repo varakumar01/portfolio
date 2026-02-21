@@ -76,6 +76,112 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
         </div>
       );
 
+    case 'status':
+      return (
+        <div className="terminal-output">
+          <div>
+            <span className="bg-red-600 text-white px-2 py-1">{data.statusMessage.status}</span>
+            <span className="ml-2">{data.statusMessage.message}</span>
+          </div>
+        </div>
+      );
+
+    case 'impact':
+      return (
+        <div className="terminal-output">
+          <div className="text-green-400 font-bold mb-2">Career Impact:</div>
+          {data.impact.map((item, idx) => (
+            <div key={idx} className="text-cyan-400">• {item}</div>
+          ))}
+        </div>
+      );
+
+    case 'issues':
+      return (
+        <div className="terminal-output">
+          <div className="text-green-400 font-bold mb-2">Known Issues:</div>
+          {data.knownIssues.map((issue, idx) => (
+            <div key={idx} className="flex items-center gap-2">
+              <span className={`inline-block w-2 h-2 rounded-full ${issue.status === 'ongoing' ? 'bg-orange-500' : 'bg-green-500'}`}></span>
+              <span className="text-yellow-400">{issue.text}</span>
+            </div>
+          ))}
+        </div>
+      );
+
+    case 'contact':
+      return (
+        <div className="terminal-output">
+          <div className="text-green-400 font-bold mb-2">Contact:</div>
+          <div className="space-y-1">
+            <div>
+              <span className="text-gray-400">Email:</span>{' '}
+              <a href={`mailto:${data.social.email}`} className="text-blue-400 underline">
+                {data.social.email}
+              </a>
+            </div>
+            <div>
+              <span className="text-gray-400">GitLab:</span>{' '}
+              <a href={data.social.gitlab} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">
+                {data.social.gitlab}
+              </a>
+            </div>
+            <div>
+              <span className="text-gray-400">GitHub:</span>{' '}
+              <a href={data.social.github} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">
+                {data.social.github}
+              </a>
+            </div>
+            <div>
+              <span className="text-gray-400">LinkedIn:</span>{' '}
+              <a href={data.social.linkedin} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">
+                {data.social.linkedin}
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'gitlab-help':
+      return (
+        <div className="terminal-output">
+          <div className="text-green-400 font-bold mb-1">Gitlab Commands:</div>
+          <div className="ml-3">
+            <div><span className="text-cyan-400">gitlab --featured</span>  # show only top projects</div>
+            <div><span className="text-cyan-400">gitlab --skills</span>    # list tech used in Gitlab</div>
+            <div><span className="text-cyan-400">gitlab --recent</span>    # show recent projects</div>
+          </div>
+        </div>
+      );
+
+    case 'gitlab':
+      return (
+        <div className="terminal-output">
+          <div className="text-green-400 font-bold mb-2">GitLab Profile:</div>
+          <div className="mb-1">
+            <span className="text-gray-400">Username:</span> <span className="text-white">{data.gitlab.gitlab_username}</span>
+          </div>
+          <div className="mb-1">
+            <span className="text-gray-400">Profile:</span> <a href={data.gitlab.profile} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">{data.gitlab.profile}</a>
+          </div>
+          <div className="mt-2 text-yellow-400 font-bold">Statistics:</div>
+          <div className="ml-3">
+            <div><span className="text-gray-400">Repositories:</span> {data.gitlab.stats.repos}</div>
+            <div><span className="text-gray-400">Contributions:</span> {data.gitlab.stats.contributions}</div>
+            <div><span className="text-gray-400">Focus:</span> {data.gitlab.stats.focus}</div>
+          </div>
+          <div className="mt-2 text-yellow-400 font-bold">Notable Repositories:</div>
+          <div className="ml-3">
+            {data.gitlab.repositories.map((repo, idx) => (
+              <div key={idx} className="text-cyan-400">• {repo}</div>
+            ))}
+          </div>
+          <div className="mt-2 text-gray-400 text-sm">
+            Try 'gitlab --help' for more options
+          </div>
+        </div>
+      );
+
     case 'projects':
       return (
         <div className="terminal-output">
