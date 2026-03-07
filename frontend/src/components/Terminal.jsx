@@ -10,6 +10,7 @@ const Terminal = () => {
   const [userIp, setUserIp] = useState('fetching...');
   const [tabMatches, setTabMatches] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
+  const [tabOriginalInput, setTabOriginalInput] = useState('');
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
 
@@ -160,10 +161,23 @@ const Terminal = () => {
           break;
         case 'exit':
         case 'quit':
-          output = { type: 'system', content: 'Closing terminal...' };
-          setHistory(prev => [...prev, output]);
+          setHistory(prev => [...prev, 
+            { type: 'command', content: cmd },
+            { type: 'system', content: 'exiting the terminal...' }
+          ]);
           setTimeout(() => {
+            // Try to close the window
+            window.open('', '_self', '');
             window.close();
+            
+            // If window.close() fails (browser blocked it), show fallback
+            setTimeout(() => {
+              if (!window.closed) {
+                setHistory(prev => [...prev, 
+                  { type: 'system', content: 'Browser prevented auto-close. Please close the tab manually (Ctrl+W / Cmd+W)' }
+                ]);
+              }
+            }, 100);
           }, 500);
           return;
         default:
@@ -188,7 +202,8 @@ const Terminal = () => {
         return; // Ignore tab if no input
       }
       
-      const input = currentCommand.trim();
+      // Use the original input for matching, not the current filled value
+      const input = tabMatches.length > 0 ? tabOriginalInput : currentCommand.trim();
       const inputLower = input.toLowerCase();
       const parts = input.split(' ');
       
@@ -224,24 +239,27 @@ const Terminal = () => {
         // No matches, clear tab state
         setTabMatches([]);
         setTabIndex(0);
+        setTabOriginalInput('');
       } else if (matches.length === 1) {
         // Single match, autocomplete
         setCurrentCommand(matches[0]);
         setTabMatches([]);
         setTabIndex(0);
+        setTabOriginalInput('');
       } else {
         // Multiple matches
-        if (tabMatches.length === 0 || JSON.stringify(tabMatches) !== JSON.stringify(matches)) {
-          // First tab press or different matches - show options
+        if (tabMatches.length === 0) {
+          // First tab press - show all matches and fill first
           setHistory(prev => [...prev, 
-            { type: 'command', content: currentCommand },
+            { type: 'command', content: input },
             { type: 'system', content: matches.join('  ') }
           ]);
           setTabMatches(matches);
           setTabIndex(0);
+          setTabOriginalInput(input);
           setCurrentCommand(matches[0]);
         } else {
-          // Subsequent tab presses - cycle through matches
+          // Already cycling - move to next match
           const nextIndex = (tabIndex + 1) % matches.length;
           setTabIndex(nextIndex);
           setCurrentCommand(matches[nextIndex]);
@@ -274,10 +292,12 @@ const Terminal = () => {
       setCurrentCommand('');
       setTabMatches([]);
       setTabIndex(0);
+      setTabOriginalInput('');
     } else {
       // Reset tab completion on any other key
       setTabMatches([]);
       setTabIndex(0);
+      setTabOriginalInput('');
     }
   };
 
