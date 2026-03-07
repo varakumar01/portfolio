@@ -277,7 +277,7 @@
 }
 
 .terminal-fade-out {
-  animation: fadeOut 2s ease-out forwards;
+  animation: fadeOut 0.8s ease-out forwards;
 }
 
 @keyframes fadeOut {

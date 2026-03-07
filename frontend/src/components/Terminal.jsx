@@ -204,8 +204,8 @@ const Terminal = () => {
             setTimeout(() => {
               setShowParticles(true);
               setTerminalStatus('shutdown');
-            }, 1500);
-          }, 800);
+            }, 800);
+          }, 600);
           return;
         default:
           output = { type: 'error', content: `${command}: command not found` };
@@ -344,7 +344,7 @@ const Terminal = () => {
         onClick={() => terminalStatus === 'active' && inputRef.current?.focus()}
         style={{
           opacity: terminalStatus === 'shutdown' ? 0 : 1,
-          transition: 'opacity 2s ease-out',
+          transition: 'opacity 0.8s ease-out',
           position: 'relative',
           zIndex: terminalStatus === 'shutdown' ? 1 : 10
         }}

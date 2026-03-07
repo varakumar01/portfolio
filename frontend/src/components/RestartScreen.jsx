@@ -23,7 +23,10 @@ const RestartScreen = ({ onRestart }) => {
         onClick={onRestart}
         style={{
           cursor: 'pointer',
-          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
           transition: 'transform 0.3s ease, opacity 0.3s ease'
         }}
         onMouseEnter={(e) => {
@@ -50,7 +53,9 @@ const RestartScreen = ({ onRestart }) => {
             color: '#00ff00',
             fontFamily: "'Source Code Pro', 'Courier New', monospace",
             letterSpacing: '2px',
-            textShadow: '0 0 10px rgba(0, 255, 0, 0.5)'
+            textShadow: '0 0 10px rgba(0, 255, 0, 0.5)',
+            textAlign: 'center',
+            whiteSpace: 'nowrap'
           }}
         >
           Start a new session
