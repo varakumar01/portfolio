@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react';
 
 const WatchDogsLogo = () => (
   <img
-    src="https://customer-assets.emergentagent.com/job_linux-portfolio-demo/artifacts/vlqctr2o_watch-dogs-logo-png-transparent.png"
+    src="https://customer-assets.emergentagent.com/job_linux-portfolio-demo/artifacts/lnwltie4_6152442610761534938.jpg"
     alt="Watch Dogs Logo"
     style={{
       position: 'fixed',
