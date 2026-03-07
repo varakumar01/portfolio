@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { portfolioData } from '../mock';
 import CommandOutput from './CommandOutput';
+import Particles from './Particles';
+import RestartScreen from './RestartScreen';
 
 const Terminal = () => {
   const [history, setHistory] = useState([]);
@@ -11,8 +13,32 @@ const Terminal = () => {
   const [tabMatches, setTabMatches] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
   const [tabOriginalInput, setTabOriginalInput] = useState('');
+  const [terminalStatus, setTerminalStatus] = useState('active'); // active, exiting, shutdown
+  const [showParticles, setShowParticles] = useState(false);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
+
+  const restartTerminal = () => {
+    // Reset all state
+    setHistory([
+      { type: 'system', content: `${portfolioData.user.name} - ${portfolioData.user.role}` },
+      { type: 'system', content: '' },
+      { type: 'system', content: "Type 'help' for available commands or 'ls' to see portfolio sections." },
+      { type: 'system', content: '' }
+    ]);
+    setCommandHistory([]);
+    setHistoryIndex(-1);
+    setCurrentCommand('');
+    setTabMatches([]);
+    setTabIndex(0);
+    setTabOriginalInput('');
+    setTerminalStatus('active');
+    setShowParticles(false);
+    
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+  };
 
   useEffect(() => {
     // Fetch user's public IP immediately on load
@@ -161,24 +187,25 @@ const Terminal = () => {
           break;
         case 'exit':
         case 'quit':
+          setTerminalStatus('exiting');
           setHistory(prev => [...prev, 
             { type: 'command', content: cmd },
-            { type: 'system', content: 'exiting the terminal...' }
+            { type: 'system', content: '[+] Terminating session...' }
           ]);
+          
           setTimeout(() => {
-            // Try to close the window
-            window.open('', '_self', '');
-            window.close();
+            setHistory(prev => [...prev, 
+              { type: 'system', content: `Connection to ${userIp} closed.` },
+              { type: 'system', content: '' },
+              { type: 'system', content: 'Session ended.' }
+            ]);
             
-            // If window.close() fails (browser blocked it), show fallback
+            // Start transition after messages
             setTimeout(() => {
-              if (!window.closed) {
-                setHistory(prev => [...prev, 
-                  { type: 'system', content: 'Browser prevented auto-close. Please close the tab manually (Ctrl+W / Cmd+W)' }
-                ]);
-              }
-            }, 100);
-          }, 500);
+              setShowParticles(true);
+              setTerminalStatus('shutdown');
+            }, 1500);
+          }, 800);
           return;
         default:
           output = { type: 'error', content: `${command}: command not found` };
@@ -189,6 +216,12 @@ const Terminal = () => {
   };
 
   const handleKeyDown = (e) => {
+    // Prevent any input if terminal is not active
+    if (terminalStatus !== 'active') {
+      e.preventDefault();
+      return;
+    }
+    
     if (e.key === 'Enter') {
       e.preventDefault();
       handleCommand(currentCommand);
@@ -302,10 +335,20 @@ const Terminal = () => {
   };
 
   return (
-    <div 
-      className="terminal-container"
-      onClick={() => inputRef.current?.focus()}
-    >
+    <>
+      {showParticles && <Particles />}
+      {terminalStatus === 'shutdown' && <RestartScreen onRestart={restartTerminal} />}
+      
+      <div 
+        className={`terminal-container ${terminalStatus === 'shutdown' ? 'terminal-fade-out' : ''}`}
+        onClick={() => terminalStatus === 'active' && inputRef.current?.focus()}
+        style={{
+          opacity: terminalStatus === 'shutdown' ? 0 : 1,
+          transition: 'opacity 2s ease-out',
+          position: 'relative',
+          zIndex: terminalStatus === 'shutdown' ? 1 : 10
+        }}
+      >
       <div className="terminal-header">
         <div className="terminal-buttons">
           <span className="terminal-button close"></span>
@@ -353,20 +396,23 @@ const Terminal = () => {
             <span className="terminal-path">~</span>
             <span className="terminal-dollar">$</span>
           </span>
-          <input
-            ref={inputRef}
-            type="text"
-            className="terminal-input"
-            value={currentCommand}
-            onChange={(e) => setCurrentCommand(e.target.value)}
-            onKeyDown={handleKeyDown}
-            spellCheck="false"
-            autoComplete="off"
-            autoFocus
-          />
+          {terminalStatus === 'active' && (
+            <input
+              ref={inputRef}
+              type="text"
+              className="terminal-input"
+              value={currentCommand}
+              onChange={(e) => setCurrentCommand(e.target.value)}
+              onKeyDown={handleKeyDown}
+              spellCheck="false"
+              autoComplete="off"
+              autoFocus
+            />
+          )}
         </div>
       </div>
     </div>
+    </>
   );
 };
 
