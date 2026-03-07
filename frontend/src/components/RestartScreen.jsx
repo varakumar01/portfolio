@@ -20,17 +20,21 @@ const RestartScreen = ({ onRestart }) => {
         background: 'transparent'
       }}
     >
-      {/* Watch Dogs Logo at the top */}
+      {/* Watch Dogs Logo as large background element */}
       <img
         src="https://customer-assets.emergentagent.com/job_linux-portfolio-demo/artifacts/pts0vmtv_watch-dogs-logo-png-transparent-removebg-preview.png"
         alt="Watch Dogs Logo"
         style={{
-          width: '350px',
-          height: '350px',
-          marginBottom: '40px',
-          opacity: 0.9,
-          filter: 'brightness(0) invert(1) sepia(1) hue-rotate(90deg) saturate(6) drop-shadow(0 0 15px rgba(0, 255, 0, 0.6))',
-          pointerEvents: 'none'
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '900px',
+          height: '900px',
+          opacity: 0.15,
+          zIndex: 101,
+          pointerEvents: 'none',
+          filter: 'brightness(0) invert(1) sepia(1) hue-rotate(90deg) saturate(5) drop-shadow(0 0 2px rgba(0, 255, 0, 0.3))'
         }}
       />
       
