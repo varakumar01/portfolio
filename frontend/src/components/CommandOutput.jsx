@@ -19,6 +19,7 @@ const CommandOutput = ({ type, data, showAll, showLong }) => {
             <div>  <span className="text-green-400">impact</span>     - Show career impact metrics</div>
             <div>  <span className="text-green-400">neofetch</span>   - Display system information</div>
             <div>  <span className="text-green-400">clear</span>      - Clear terminal screen</div>
+            <div>  <span className="text-green-400">exit</span>       - Close terminal</div>
             <div>  <span className="text-green-400">help</span>       - Show this help message</div>
           </div>
           <div className="mt-1 text-gray-400">Tip: You can type section names directly without 'cat'</div>

@@ -158,6 +158,14 @@ const Terminal = () => {
         case 'neofetch':
           output = { type: 'neofetch' };
           break;
+        case 'exit':
+        case 'quit':
+          output = { type: 'system', content: 'Closing terminal...' };
+          setHistory(prev => [...prev, output]);
+          setTimeout(() => {
+            window.close();
+          }, 500);
+          return;
         default:
           output = { type: 'error', content: `${command}: command not found` };
       }
@@ -188,7 +196,7 @@ const Terminal = () => {
       const commands = [
         'help', 'ls', 'clear', 'whoami', 'about', 'status', 'impact', 
         'neofetch', 'projects', 'experience', 'skills', 'certifications', 
-        'contact', 'gitlab', 'issues', 'resume', 'cat', 'sudo'
+        'contact', 'gitlab', 'issues', 'resume', 'cat', 'sudo', 'exit'
       ];
       
       const sections = [
