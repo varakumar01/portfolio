@@ -41,10 +41,19 @@ const Terminal = () => {
   };
 
   useEffect(() => {
-    // Fetch user's public IP — kept in component state only, not stored in shared objects
+    // Fetch user's public IP for terminal display
     fetch('https://api.ipify.org?format=json')
-      .then(res => res.json())
-      .then(data => setUserIp(data.ip))
+      .then(res => {
+        if (!res.ok) throw new Error('IP fetch failed');
+        return res.json();
+      })
+      .then(data => {
+        // Sanitize: only accept valid IPv4/IPv6 patterns
+        const ip = String(data.ip || '').trim();
+        if (/^[\d.:a-fA-F]+$/.test(ip) && ip.length <= 45) {
+          setUserIp(ip);
+        }
+      })
       .catch(() => setUserIp('127.0.0.1'));
 
     // Initial prompt without welcome message
@@ -124,7 +133,7 @@ const Terminal = () => {
       } else if (section === 'issues' || section === '.issues' || section === 'known-issues') {
         output = { type: 'issues' };
       } else if (section === 'resume' || section === '.resume') {
-        window.open(portfolioData.resumeLink, '_blank');
+        window.open(portfolioData.resumeLink, '_blank', 'noopener,noreferrer');
         output = { type: 'system', content: 'Opening resume in new tab...' };
       } else if (section) {
         output = { type: 'error', content: `cat: ${section}: No such file or directory` };
@@ -173,7 +182,7 @@ const Terminal = () => {
           output = { type: 'impact' };
           break;
         case 'resume':
-          window.open(portfolioData.resumeLink, '_blank');
+          window.open(portfolioData.resumeLink, '_blank', 'noopener,noreferrer');
           output = { type: 'system', content: 'Opening resume in new tab...' };
           break;
         case 'neofetch':

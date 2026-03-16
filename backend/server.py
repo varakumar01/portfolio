@@ -8,7 +8,8 @@ import os
 import logging
 import traceback
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
+from fastapi.exceptions import RequestValidationError
 from typing import List
 import uuid
 from datetime import datetime, timezone
@@ -51,6 +52,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
         return response
 
 
@@ -63,7 +66,19 @@ class StatusCheck(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class StatusCheckCreate(BaseModel):
-    client_name: str = Field(..., max_length=100)
+    client_name: str = Field(..., min_length=1, max_length=100)
+
+    @field_validator('client_name')
+    @classmethod
+    def validate_client_name(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError('client_name must not be empty or whitespace-only')
+        # Remove null bytes and control characters
+        v = ''.join(c for c in v if c.isprintable())
+        if not v:
+            raise ValueError('client_name contains only non-printable characters')
+        return v
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
@@ -84,7 +99,8 @@ async def create_status_check(request: Request, input: StatusCheckCreate):
     return status_obj
 
 @api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
+@limiter.limit("30/minute")
+async def get_status_checks(request: Request):
     # Exclude MongoDB's _id field, sort by timestamp desc, cap at 100
     status_checks = await db.status_checks.find(
         {}, {"_id": 0}
@@ -107,7 +123,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', 'https://portfolio.dragnux.com').split(','),
+    allow_origins=[o.strip() for o in os.environ.get('CORS_ORIGINS', 'https://portfolio.dragnux.com').split(',') if o.strip()],
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
@@ -118,6 +134,15 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Validation error handler — return generic message without leaking schema details
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.warning(f"Validation error: {exc.errors()}")
+    return JSONResponse(
+        status_code=422,
+        content={"detail": "Invalid input"},
+    )
 
 # Generic error handler — log full trace server-side, return safe response
 @app.exception_handler(Exception)

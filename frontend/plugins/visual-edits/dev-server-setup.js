@@ -3,7 +3,8 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
-const { execSync } = require("child_process");
+const crypto = require("crypto");
+const { execFileSync } = require("child_process");
 
 // ───────────────────────────────────────────────────────────────────────────────
 // Variable Edit Handler - For editing dynamic content from traceable sources
@@ -88,8 +89,8 @@ function processVariableEdit(change, frontendRoot, babelTools) {
   // Prefer absolute path (sourceFileAbs) if provided, otherwise resolve from sourceFile
   let targetFile;
   if (change.sourceFileAbs) {
-    // Use absolute path directly
-    targetFile = change.sourceFileAbs;
+    // Resolve to real path to prevent symlink traversal attacks
+    targetFile = fs.realpathSync(change.sourceFileAbs);
   } else if (change.sourceFile) {
     targetFile = resolveSourceFile(change.sourceFile, frontendRoot);
     if (!targetFile) {
@@ -386,9 +387,9 @@ function setupDevServer(config) {
         res.header("Access-Control-Allow-Headers", "Content-Type, x-api-key");
       }
 
-      // 🔑 Check header against Supervisor password
+      // 🔑 Check header against Supervisor password (timing-safe comparison)
       const key = req.get("x-api-key");
-      if (!SUP_PASS || key !== SUP_PASS) {
+      if (!SUP_PASS || !key || !crypto.timingSafeEqual(Buffer.from(key), Buffer.from(SUP_PASS))) {
         return res.status(401).json({ error: "Unauthorized" });
       }
 
@@ -462,8 +463,8 @@ function setupDevServer(config) {
             // Commit the change to git
             const timestamp = Date.now();
             try {
-              execSync(`git -c user.name="visual-edit" -c user.email="support@emergent.sh" add "${result.file}"`);
-              execSync(`git -c user.name="visual-edit" -c user.email="support@emergent.sh" commit -m "visual_edit_variable_${timestamp}"`);
+              execFileSync("git", ["-c", "user.name=visual-edit", "-c", "user.email=support@emergent.sh", "add", result.file]);
+              execFileSync("git", ["-c", "user.name=visual-edit", "-c", "user.email=support@emergent.sh", "commit", "-m", `visual_edit_variable_${timestamp}`]);
             } catch (gitError) {
               console.error(`Git commit failed for variableEdit: ${gitError.message}`);
             }
@@ -905,8 +906,8 @@ function setupDevServer(config) {
           const timestamp = Date.now();
           try {
             // Use -c flag for per-invocation git config to avoid modifying any config
-            execSync(`git -c user.name="visual-edit" -c user.email="support@emergent.sh" add "${targetFile}"`);
-            execSync(`git -c user.name="visual-edit" -c user.email="support@emergent.sh" commit -m "visual_edit_${timestamp}"`);
+            execFileSync("git", ["-c", "user.name=visual-edit", "-c", "user.email=support@emergent.sh", "add", targetFile]);
+            execFileSync("git", ["-c", "user.name=visual-edit", "-c", "user.email=support@emergent.sh", "commit", "-m", `visual_edit_${timestamp}`]);
           } catch (gitError) {
             console.error(`Git commit failed: ${gitError.message}`);
             // Continue even if git fails - file write succeeded
@@ -924,7 +925,8 @@ function setupDevServer(config) {
         }
         res.json(response);
       } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error(`[edit-file] Error: ${err.message}`);
+        res.status(500).json({ error: "Internal server error" });
       }
     });
 
